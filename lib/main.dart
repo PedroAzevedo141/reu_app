@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:reu_app/pages/home.dart';
+import 'package:reu_app/pages/activity.dart';
+import 'package:reu_app/pages/residents.dart';
+import 'package:reu_app/pages/warnings.dart';
+import 'package:reu_app/pages/polls.dart';
 
 void main() => runApp(const MyApp());
 
@@ -26,28 +31,13 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 2;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Lista de Residentes',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Calendario de Atividades',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Pagina Inicial',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Quadro de Avisos',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: Enquetes',
-      style: optionStyle,
-    ),
+    ResidentsPage(),
+    ActivityPage(),
+    HomePage(),
+    WarningPage(),
+    PoolPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -60,7 +50,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
+        title: const Text('REU APP'),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
