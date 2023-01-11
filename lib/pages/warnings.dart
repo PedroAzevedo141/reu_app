@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class WarningPage extends StatefulWidget {
   const WarningPage({Key? key}) : super(key: key);
 
@@ -13,9 +15,20 @@ class _WarningPageState extends State<WarningPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Index 3: Quadro de Avisos',
-      style: optionStyle,
+    return Column(
+      children: const <Widget>[
+        ElevatedCardExample(),
+        Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: Center(
+            child: Text(
+              'Index 3: Quadro de Avisos',
+              style: optionStyle,
+            ),
+          ),
+        ),
+        Spacer(),
+      ],
     );
   }
 }

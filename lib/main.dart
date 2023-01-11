@@ -30,8 +30,6 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 2;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     ResidentsPage(),
     ActivityPage(),
@@ -50,7 +48,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF564256),
         title: const Text('REU APP'),
+        actions: <Widget>[
+          IconButton(
+            iconSize: 40,
+            padding: const EdgeInsets.only(right: 20),
+            icon: const Icon(Icons.supervised_user_circle),
+            tooltip: 'Show Snackbar',
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -60,29 +68,71 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           BottomNavigationBarItem(
             icon: Icon(Icons.groups),
             label: 'Residentes',
+            backgroundColor: Color(0xFF564256),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
             label: 'Atividades',
+            backgroundColor: Color(0xFF564256),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',
+            backgroundColor: Color(0xFF564256),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.warning),
             label: 'Avisos',
+            backgroundColor: Color(0xFF564256),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.poll),
             label: 'Enquetes',
+            backgroundColor: Color(0xFF564256),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: const Color(0xFF262626),
+        selectedItemColor: const Color(0xFFFC814A),
+        unselectedItemColor: const Color(0xFFFFFFFF),
         showUnselectedLabels: true,
         onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class ElevatedCardExample extends StatelessWidget {
+  const ElevatedCardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Card(
+        color: const Color(0xFF96939B),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              children: const <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Usuario:\tPedro Azevedo\n'
+                      'Morador:\tAtivo\n'
+                      'Ativo desde:\t01/01/2018',
+                    ),
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 50.0,
+                  backgroundColor: Colors.transparent,
+                  child: FlutterLogo(size: 80),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
