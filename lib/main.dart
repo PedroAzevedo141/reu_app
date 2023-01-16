@@ -52,9 +52,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         title: const Text('REU APP'),
         actions: <Widget>[
           IconButton(
-            iconSize: 40,
+            iconSize: 30,
             padding: const EdgeInsets.only(right: 20),
-            icon: const Icon(Icons.supervised_user_circle),
+            icon: const Icon(Icons.settings),
             tooltip: 'Show Snackbar',
             onPressed: () {},
           ),
