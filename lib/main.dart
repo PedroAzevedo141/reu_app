@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:reu_app/pages/home.dart';
-import 'package:reu_app/pages/activity.dart';
-import 'package:reu_app/pages/residents.dart';
-import 'package:reu_app/pages/warnings.dart';
-import 'package:reu_app/pages/polls.dart';
+import 'package:reu_app/home/home.dart';
+import 'package:reu_app/activity/activity.dart';
+import 'package:reu_app/residents/residents.dart';
+import 'package:reu_app/warnings/warnings.dart';
+import 'package:reu_app/polls/polls.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(const MyApp());
+
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  runApp(MyApp());
+
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // firestore.collection("products").add({
+  //   'Nome': "Pedro",
+  //   'Number': "81995636499",
+  // }).then((value) => print("OPAAAAAAAAAAAA"));
+
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,19 +61,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF564256),
-        title: const Text('REU APP'),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 30,
-            padding: const EdgeInsets.only(right: 20),
-            icon: const Icon(Icons.settings),
-            tooltip: 'Show Snackbar',
-            onPressed: () {},
-          ),
-        ],
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

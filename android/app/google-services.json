@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "437396638271",
+    "project_id": "reu-app-2066f",
+    "storage_bucket": "reu-app-2066f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437396638271:android:8311f8ff9374318dfc868a",
+        "android_client_info": {
+          "package_name": "com.example.reu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437396638271-c7iufah4m1ph1gbkbl1j9ku5h9sv5ce5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reu_app",
+            "certificate_hash": "e145c3f29e184dd884c32be83e6d2e17fa507973"
+          }
+        },
+        {
+          "client_id": "437396638271-omkcrhfqvkgkgvu1pbivvjl7p686ft3b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz3ZBMRXAFwzLwBpkBeLduUspfvsFbce8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437396638271-omkcrhfqvkgkgvu1pbivvjl7p686ft3b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
