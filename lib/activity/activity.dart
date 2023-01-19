@@ -11,7 +11,8 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,6 +22,15 @@ class _ActivityPageState extends State<ActivityPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           HeaderWithSearchBox(size: size),
+          const Text(
+            'Index 1: Calendario de Atividades',
+            style: optionStyle,
+          ),
+          const Padding(padding: EdgeInsets.all(400)),
+          const Text(
+            'Index 1: Calendario de Atividades',
+            style: optionStyle,
+          ),
           const Text(
             'Index 1: Calendario de Atividades',
             style: optionStyle,
@@ -36,4 +46,3 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 }
-

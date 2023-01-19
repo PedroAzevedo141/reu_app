@@ -27,6 +27,7 @@ class _WarningPageState extends State<WarningPage> {
             'Index 3: Quadro de Avisos',
             style: optionStyle,
           ),
+          const Padding(padding: EdgeInsets.all(400)),
 
           // TitleWithMoreBtn(title: "Recomended", press: () {}),
           // RecomendsPlants(),

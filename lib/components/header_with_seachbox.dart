@@ -21,7 +21,6 @@ class HeaderWithSearchBox extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.only(
-              top: kDefaultPadding,
               left: kDefaultPadding,
               right: kDefaultPadding,
               bottom: 36 + kDefaultPadding,
@@ -35,13 +34,22 @@ class HeaderWithSearchBox extends StatelessWidget {
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Text(
-                  'Hi Uishopy!',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                Flexible(
+                  child: Text(
+                    'Hi User ...!',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const Spacer(),
+                CircleAvatar(
+                    radius: (38),
+                    backgroundColor: Colors.white,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image.asset("assets/images/no_user.png"),
+                    ))
               ],
             ),
           ),

@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
             'Index 2: Pagina Inicial',
             style: optionStyle,
           ),
+          const Padding(padding: EdgeInsets.all(400)),
 
           // TitleWithMoreBtn(title: "Recomended", press: () {}),
           // RecomendsPlants(),

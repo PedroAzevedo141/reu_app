@@ -11,7 +11,8 @@ class PoolPage extends StatefulWidget {
 }
 
 class _PoolPageState extends State<PoolPage> {
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -25,6 +26,7 @@ class _PoolPageState extends State<PoolPage> {
             'Index 4: Enquetes',
             style: optionStyle,
           ),
+          const Padding(padding: EdgeInsets.all(400)),
 
           // TitleWithMoreBtn(title: "Recomended", press: () {}),
           // RecomendsPlants(),

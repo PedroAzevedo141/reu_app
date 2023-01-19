@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:reu_app/home/home.dart';
 import 'package:reu_app/activity/activity.dart';
 import 'package:reu_app/residents/residents.dart';
@@ -6,7 +7,6 @@ import 'package:reu_app/warnings/warnings.dart';
 import 'package:reu_app/polls/polls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,6 @@ void main() async {
   //   'Nome': "Pedro",
   //   'Number': "81995636499",
   // }).then((value) => print("OPAAAAAAAAAAAA"));
-
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +41,17 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
+AppBar buildAppBar() {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: const Color(0xFF564256),
+    leading: IconButton(
+      icon: SvgPicture.asset("assets/icons/menu.svg"),
+      onPressed: () {},
+    ),
+  );
+}
+
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 2;
   static const List<Widget> _widgetOptions = <Widget>[
@@ -61,6 +71,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

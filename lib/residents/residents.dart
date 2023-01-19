@@ -11,7 +11,8 @@ class ResidentsPage extends StatefulWidget {
 }
 
 class _ResidentsPageState extends State<ResidentsPage> {
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -25,6 +26,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
             'Index 0: Lista de Residentes',
             style: optionStyle,
           ),
+          const Padding(padding: EdgeInsets.all(400)),
 
           // TitleWithMoreBtn(title: "Recomended", press: () {}),
           // RecomendsPlants(),
