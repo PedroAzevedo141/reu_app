@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:reu_app/home/home.dart';
 import 'package:reu_app/activity/activity.dart';
 import 'package:reu_app/residents/residents.dart';
-import 'package:reu_app/warnings/auxiliary_func.dart';
+import 'package:reu_app/warnings/auxiliary_funcs.dart';
 import 'package:reu_app/warnings/warnings.dart';
 import 'package:reu_app/polls/polls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

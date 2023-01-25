@@ -46,6 +46,7 @@ modalBottom(context) {
                   padding:
                       const EdgeInsets.only(bottom: 24, left: 16, right: 16),
                   child: TextFormField(
+                    // controller: warningController_title,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -58,6 +59,7 @@ modalBottom(context) {
                   padding:
                       const EdgeInsets.only(bottom: 24, left: 16, right: 16),
                   child: TextFormField(
+                    // controller: warningController_desc,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -72,7 +74,14 @@ modalBottom(context) {
                   child: Center(
                     child: ElevatedButton(
                       style: style,
-                      onPressed: () {},
+                      onPressed: () {
+                        // setState(() {
+                        //   warnings_list.add([
+                        //     warningController_title.text,
+                        //     warningController_desc.text
+                        //   ]);
+                        // });
+                      },
                       child: const Text(
                         'Enviar',
                       ),
