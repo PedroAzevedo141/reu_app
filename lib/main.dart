@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:reu_app/constants.dart';
 import 'package:reu_app/home/home.dart';
 import 'package:reu_app/activity/activity.dart';
 import 'package:reu_app/residents/residents.dart';
-import 'package:reu_app/warnings/auxiliary_funcs.dart';
 import 'package:reu_app/warnings/warnings.dart';
 import 'package:reu_app/polls/polls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,26 +45,12 @@ class MyStatefulWidget extends StatefulWidget {
 AppBar buildAppBar() {
   return AppBar(
     elevation: 0,
-    backgroundColor: const Color(0xFF564256),
+    backgroundColor: kPrimaryColor,
     leading: IconButton(
       icon: SvgPicture.asset("assets/icons/menu.svg"),
       onPressed: () {},
     ),
   );
-}
-
-FloatingActionButton? buildFloatingAction(index, context) {
-  if (index == 3) {
-    return FloatingActionButton(
-      onPressed: () {
-        modalBottom(context);
-      },
-      backgroundColor: const Color(0xFF564256),
-      foregroundColor: Colors.white,
-      child: const Icon(Icons.add),
-    );
-  }
-  return null;
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
@@ -89,34 +75,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       child: Scaffold(
         appBar: buildAppBar(),
         body: _widgetOptions.elementAt(_selectedIndex),
-        floatingActionButton: buildFloatingAction(_selectedIndex, context),
+        // floatingActionButton: buildFloatingAction(_selectedIndex, context),
         bottomNavigationBar: BottomNavigationBar(
           iconSize: 28,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.groups),
               label: 'Residentes',
-              backgroundColor: Color(0xFF564256),
+              backgroundColor: kPrimaryColor,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month),
               label: 'Atividades',
-              backgroundColor: Color(0xFF564256),
+              backgroundColor: kPrimaryColor,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Inicio',
-              backgroundColor: Color(0xFF564256),
+              backgroundColor: kPrimaryColor,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.warning),
               label: 'Avisos',
-              backgroundColor: Color(0xFF564256),
+              backgroundColor: kPrimaryColor,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.poll),
               label: 'Enquetes',
-              backgroundColor: Color(0xFF564256),
+              backgroundColor: kPrimaryColor,
             ),
           ],
           currentIndex: _selectedIndex,
