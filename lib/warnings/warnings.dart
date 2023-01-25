@@ -18,7 +18,7 @@ class _WarningPageState extends State<WarningPage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  final ReuRepository reuRepository = ReuRepository();
+  final ReuRepository reuRepositoryWarning = ReuRepository();
 
   List<WarningModels> warningsList = [];
 
@@ -28,6 +28,17 @@ class _WarningPageState extends State<WarningPage> {
   final TextEditingController warningControllerTitle = TextEditingController();
   final TextEditingController warningControllerDesc = TextEditingController();
   final TextEditingController warningControllerUser = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    reuRepositoryWarning.getWarningList().then((value) {
+      setState(() {
+        warningsList = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +108,7 @@ class _WarningPageState extends State<WarningPage> {
     setState(() {
       warningsList.remove(war);
     });
+    reuRepositoryWarning.saveWarningList(warningsList);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -114,6 +126,7 @@ class _WarningPageState extends State<WarningPage> {
           setState(() {
             warningsList.insert(deletedWarningPos!, deletedWarning!);
           });
+          reuRepositoryWarning.saveWarningList(warningsList);
         },
       ),
       duration: const Duration(seconds: 5),
@@ -153,6 +166,7 @@ class _WarningPageState extends State<WarningPage> {
     setState(() {
       warningsList.clear();
     });
+    reuRepositoryWarning.saveWarningList(warningsList);
   }
 
   modalBottom(context) {
@@ -219,8 +233,8 @@ class _WarningPageState extends State<WarningPage> {
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Detalhes do aviso',
-                        labelText: ' Insira o aviso...',
+                        labelText: 'Detalhes do aviso',
+                        hintText: ' Insira a descricao do aviso...',
                       ),
                     ),
                   ),
@@ -231,21 +245,68 @@ class _WarningPageState extends State<WarningPage> {
                       child: ElevatedButton(
                         style: style,
                         onPressed: () {
+                          String title = warningControllerTitle.text;
+                          String desc = warningControllerDesc.text;
+
+                          if (title.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Falta informacoes!"),
+                                content:
+                                    const Text("Informe o titulo do aviso..."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Colors.black),
+                                    child: const Text("Voltar"),
+                                  ),
+                                ],
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (desc.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Falta informacoes!"),
+                                content: const Text(
+                                    "Informe a descricao do aviso..."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Colors.black),
+                                    child: const Text("Voltar"),
+                                  ),
+                                ],
+                              ),
+                            );
+                            return;
+                          }
+
                           setState(() {
                             WarningModels newWarning = WarningModels(
-                              title: warningControllerTitle.text,
-                              descricao: warningControllerDesc.text,
+                              title: title,
+                              descricao: desc,
                               user: "Pedro Azevedo",
                               dateTime: DateTime.now(),
                             );
                             warningsList.add(newWarning);
                           });
-                          print(warningsList);
+                          reuRepositoryWarning.saveWarningList(warningsList);
                           clearController();
                           Navigator.pop(context);
                         },
                         child: const Text(
-                          'Enviar',
+                          'Enviar o aviso',
                         ),
                       ),
                     ),

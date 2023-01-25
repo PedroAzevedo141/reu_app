@@ -4,15 +4,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../warnings/models/warning_models.dart';
 
-class ReuRepository {
-  ReuRepository() {
-    SharedPreferences.getInstance().then((value) => sharedPreferences = value);
-  }
+const warningListKey = "warning_list";
 
+class ReuRepository {
   late SharedPreferences sharedPreferences;
 
+  Future<List<WarningModels>> getWarningList() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    final String jsonString =
+        sharedPreferences.getString(warningListKey) ?? '[]';
+    final List jsonDecoded = json.decode(jsonString) as List;
+    return jsonDecoded.map((e) => WarningModels.fromJson(e)).toList();
+  }
+
   void saveWarningList(List<WarningModels> warnings) {
-    final jsonString = json.encode(warnings);
-    print(jsonString);
+    final String jsonString = json.encode(warnings);
+    sharedPreferences.setString(warningListKey, jsonString);
   }
 }

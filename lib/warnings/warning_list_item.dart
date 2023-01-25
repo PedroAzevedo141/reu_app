@@ -36,7 +36,7 @@ class WarningListItem extends StatelessWidget {
                 Radius.circular(10),
               ),
               icon: Icons.done,
-              label: 'Ler',
+              label: 'Lida',
             ),
             SlidableAction(
               onPressed: (context) {
