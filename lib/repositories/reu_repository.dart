@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/warning_models.dart';
+import '../warnings/models/warning_models.dart';
 
 class ReuRepository {
   ReuRepository() {

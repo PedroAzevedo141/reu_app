@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
+import 'package:reu_app/warnings/models/warning_models.dart';
 import 'package:reu_app/warnings/warning_list_item.dart';
 
 import '../components/header_with_seachbox.dart';
@@ -11,8 +12,6 @@ class WarningPage extends StatefulWidget {
 
   @override
   State<WarningPage> createState() => _WarningPageState();
-
-  void modalBottom(context) {}
 }
 
 class _WarningPageState extends State<WarningPage> {
@@ -21,10 +20,14 @@ class _WarningPageState extends State<WarningPage> {
 
   final ReuRepository reuRepository = ReuRepository();
 
-  List<dynamic> warnings_list = [];
-  final TextEditingController warningController_title = TextEditingController();
-  final TextEditingController warningController_desc = TextEditingController();
-  final TextEditingController warningController_user = TextEditingController();
+  List<WarningModels> warningsList = [];
+
+  WarningModels? deletedWarning;
+  int? deletedWarningPos;
+
+  final TextEditingController warningControllerTitle = TextEditingController();
+  final TextEditingController warningControllerDesc = TextEditingController();
+  final TextEditingController warningControllerUser = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +46,16 @@ class _WarningPageState extends State<WarningPage> {
             padding: const EdgeInsets.only(left: 26, right: 26, top: 16),
             shrinkWrap: true,
             children: <Widget>[
-              for (Map war in warnings_list)
+              for (WarningModels war in warningsList)
                 WarningListItem(
-                  message: war,
+                  newWarning: war,
+                  onDelete: onDelete,
                 ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -84,6 +88,36 @@ class _WarningPageState extends State<WarningPage> {
         ),
       ],
     );
+  }
+
+  void onDelete(WarningModels war) {
+    deletedWarning = war;
+    deletedWarningPos = warningsList.indexOf(war);
+
+    setState(() {
+      warningsList.remove(war);
+    });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'O aviso ${war.title} foi removido com sucesso!',
+        style: const TextStyle(
+          color: Color(0xff060708),
+        ),
+      ),
+      backgroundColor: const Color(0xffA6E1FA),
+      action: SnackBarAction(
+        label: "Desfazer",
+        textColor: const Color(0xff0E6BA8),
+        onPressed: () {
+          setState(() {
+            warningsList.insert(deletedWarningPos!, deletedWarning!);
+          });
+        },
+      ),
+      duration: const Duration(seconds: 5),
+    ));
   }
 
   modalBottom(context) {
@@ -133,7 +167,7 @@ class _WarningPageState extends State<WarningPage> {
                     padding:
                         const EdgeInsets.only(bottom: 24, left: 16, right: 16),
                     child: TextFormField(
-                      controller: warningController_title,
+                      controller: warningControllerTitle,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -146,7 +180,7 @@ class _WarningPageState extends State<WarningPage> {
                     padding:
                         const EdgeInsets.only(bottom: 24, left: 16, right: 16),
                     child: TextFormField(
-                      controller: warningController_desc,
+                      controller: warningControllerDesc,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -163,14 +197,16 @@ class _WarningPageState extends State<WarningPage> {
                         style: style,
                         onPressed: () {
                           setState(() {
-                            warnings_list.add({
-                              'title': warningController_title.text,
-                              'desc': warningController_desc.text,
-                              // 'user': warningController_user.text,
-                              'user': "Pedro Azevedo",
-                            });
+                            WarningModels newWarning = WarningModels(
+                              title: warningControllerTitle.text,
+                              descricao: warningControllerDesc.text,
+                              user: "Pedro Azevedo",
+                              dateTime: DateTime.now(),
+                            );
+                            warningsList.add(newWarning);
                           });
-                          warningController_title.clear();
+                          print(warningsList);
+                          clearController();
                           Navigator.pop(context);
                         },
                         child: const Text(
@@ -186,5 +222,11 @@ class _WarningPageState extends State<WarningPage> {
         ),
       ),
     );
+  }
+
+  void clearController() {
+    warningControllerTitle.clear();
+    warningControllerDesc.clear();
+    warningControllerUser.clear();
   }
 }
