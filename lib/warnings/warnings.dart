@@ -77,7 +77,7 @@ class _WarningPageState extends State<WarningPage> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  // modalBottom(context);
+                  showDeleteWarningsAfirmationDialog();
                 },
                 backgroundColor: const Color(0xFFDD1C1A),
                 foregroundColor: Colors.white,
@@ -118,6 +118,41 @@ class _WarningPageState extends State<WarningPage> {
       ),
       duration: const Duration(seconds: 5),
     ));
+  }
+
+  void showDeleteWarningsAfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Limpar tudo?"),
+        content: const Text("Tem certeza que deseja apagar todos os avisos?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.black),
+            child: const Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTodos();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text('Limpar tudo'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteAllTodos() {
+    setState(() {
+      warningsList.clear();
+    });
   }
 
   modalBottom(context) {
