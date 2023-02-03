@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
-import 'package:reu_app/warnings/models/warning_models.dart';
-import 'package:reu_app/warnings/warning_list_item.dart';
+import 'package:reu_app/screens/warnings/models/warning_models.dart';
+import 'package:reu_app/screens/warnings/warning_list_item.dart';
 
-import '../components/header_with_seachbox.dart';
-import '../main.dart';
-import '../repositories/reu_repository.dart';
+import '../../components/header_with_seachbox.dart';
+import '../../repositories/reu_repository.dart';
 
 class WarningPage extends StatefulWidget {
   const WarningPage({Key? key}) : super(key: key);
@@ -44,59 +43,68 @@ class _WarningPageState extends State<WarningPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
       children: <Widget>[
-        HeaderWithSearchBox(size: size),
-        const Text(
-          'Quadro de avisos!',
-          style: optionStyle,
-        ),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.only(left: 26, right: 26, top: 16),
-            shrinkWrap: true,
-            children: <Widget>[
-              for (WarningModels war in warningsList)
-                WarningListItem(
-                  newWarning: war,
-                  onDelete: onDelete,
+        CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              backgroundColor: kPrimaryColor,
+              elevation: 0.0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: const Text("Quadro de Avisos"),
+                centerTitle: true,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: HeaderWithSearchBox(size: size),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                for (WarningModels war in warningsList)
+                  WarningListItem(
+                    newWarning: war,
+                    onDelete: onDelete,
+                  ),
+              ]),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {
+                        modalBottom(context);
+                      },
+                      backgroundColor: const Color(0xFF82BB92),
+                      foregroundColor: Colors.white,
+                      child: const Icon(Icons.add),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () {
+                        // modalBottom(context);
+                      },
+                      backgroundColor: const Color(0xFFF0C808),
+                      foregroundColor: Colors.white,
+                      child: const Icon(Icons.done_all),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () {
+                        showDeleteWarningsAfirmationDialog();
+                      },
+                      backgroundColor: const Color(0xFFDD1C1A),
+                      foregroundColor: Colors.white,
+                      child: const Icon(Icons.delete_forever),
+                    ),
+                  ],
                 ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  modalBottom(context);
-                },
-                backgroundColor: const Color(0xFF82BB92),
-                foregroundColor: Colors.white,
-                child: const Icon(Icons.add),
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  // modalBottom(context);
-                },
-                backgroundColor: const Color(0xFFF0C808),
-                foregroundColor: Colors.white,
-                child: const Icon(Icons.done_all),
-              ),
-              FloatingActionButton(
-                onPressed: () {
-                  showDeleteWarningsAfirmationDialog();
-                },
-                backgroundColor: const Color(0xFFDD1C1A),
-                foregroundColor: Colors.white,
-                child: const Icon(Icons.delete_forever),
-              ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        )
       ],
     );
   }

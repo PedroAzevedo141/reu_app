@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:reu_app/warnings/models/warning_models.dart';
+import 'package:reu_app/screens/warnings/models/warning_models.dart';
 
 class WarningListItem extends StatelessWidget {
   WarningModels newWarning;

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../warnings/models/warning_models.dart';
+import '../screens/warnings/models/warning_models.dart';
 
 const warningListKey = "warning_list";
 
