@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:reu_app/models/user_model.dart';
 import 'package:reu_app/screens/home_page_controller.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,14 +20,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 4, 125, 141),
-        primarySwatch: Colors.blue,
+    return ScopedModel<UserModel>(
+      model: UserModel(),
+      child: MaterialApp(
+        title: _title,
+        theme: ThemeData(
+          primaryColor: Color.fromARGB(255, 4, 125, 141),
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: HomePageController(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: HomePageController(),
     );
   }
 }

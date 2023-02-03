@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
+import 'package:reu_app/screens/auth_users/login_screen.dart';
 import 'package:reu_app/tiles/drawer_tile.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -50,7 +51,10 @@ class CustomDrawer extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).primaryColor),
                               ),
-                              onTap: (() {}),
+                              onTap: (() {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                              }),
                             ),
                           ],
                         ),
