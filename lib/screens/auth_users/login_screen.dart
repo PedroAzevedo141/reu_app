@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:reu_app/constants.dart';
 import 'package:reu_app/models/user_model.dart';
 import 'package:reu_app/screens/auth_users/signup_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class LoginScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +48,7 @@ class LoginScreen extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               children: [
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     hintText: "E-mail",
                   ),
@@ -53,6 +62,7 @@ class LoginScreen extends StatelessWidget {
                   height: 16.0,
                 ),
                 TextFormField(
+                  controller: _passController,
                   decoration: InputDecoration(
                     hintText: "Senha",
                   ),
@@ -81,7 +91,12 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {}
 
-                      model.signIn();
+                      model.signIn(
+                        email: _emailController.text,
+                        pass: _passController.text,
+                        onSuccess: _onSuccess,
+                        onFail: _onFail,
+                      );
                     },
                     child: Text(
                       'Entrar',
@@ -97,5 +112,17 @@ class LoginScreen extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  void _onSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  void _onFail() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Falha ao Entrar!"),
+      backgroundColor: redAlert,
+      duration: Duration(seconds: 2),
+    ));
   }
 }

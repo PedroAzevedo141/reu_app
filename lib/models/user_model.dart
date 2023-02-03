@@ -12,6 +12,13 @@ class UserModel extends Model {
 
   bool isLoading = false;
 
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+
+    _loadCurrentUser();
+  }
+
   void signUp(
       {required Map<String, dynamic> userData,
       required String pass,
@@ -26,7 +33,7 @@ class UserModel extends Model {
         .then((user) async {
       firebaseUser = user;
 
-      await _saveUserData(userData);
+      await _saveUserData(userData, user);
 
       onSuccess();
       isLoading = false;
@@ -47,14 +54,29 @@ class UserModel extends Model {
     notifyListeners();
   }
 
-  void signIn() async {
+  void signIn(
+      {required String email,
+      required String pass,
+      required VoidCallback onSuccess,
+      required VoidCallback onFail}) async {
     isLoading = true;
     notifyListeners();
 
-    await Future.delayed(Duration(seconds: 3));
+    _auth
+        .signInWithEmailAndPassword(email: email, password: pass)
+        .then((user) async {
+      firebaseUser = user;
 
-    isLoading = false;
-    notifyListeners();
+      await _loadCurrentUser();
+
+      onSuccess();
+      isLoading = false;
+      notifyListeners();
+    }).catchError((e) {
+      onFail();
+      isLoading = false;
+      notifyListeners();
+    });
   }
 
   void recoverPass() {}
@@ -63,8 +85,28 @@ class UserModel extends Model {
     return firebaseUser != null;
   }
 
-  Future<Null> _saveUserData(Map<String, dynamic> userData) async {
+  Future<Null> _saveUserData(
+      Map<String, dynamic> userData, UserCredential user) async {
     this.userData = userData;
-    await FirebaseFirestore.instance.collection("users").add(userData);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.user?.uid)
+        .set(userData);
+  }
+
+  Future<Null> _loadCurrentUser() async {
+    if (firebaseUser == null) {
+      User? firebaseUser = _auth.currentUser;
+    }
+    if (firebaseUser != null) {
+      if (userData["name"] == null) {
+        DocumentSnapshot docUser = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(firebaseUser?.user!.uid)
+            .get();
+        userData = docUser.data() as Map<String, dynamic>;
+      }
+    }
+    notifyListeners();
   }
 }
