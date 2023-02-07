@@ -3,7 +3,7 @@ import 'package:reu_app/constants.dart';
 import 'package:reu_app/screens/warnings/models/warning_models.dart';
 import 'package:reu_app/screens/warnings/warning_list_item.dart';
 
-import '../../components/header_with_seachbox.dart';
+import '../../widgets/header_with_seachbox.dart';
 import '../../repositories/reu_repository.dart';
 
 class WarningPage extends StatefulWidget {

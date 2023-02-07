@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reu_app/components/header_with_seachbox.dart';
+import 'package:reu_app/widgets/header_with_seachbox.dart';
 import 'package:reu_app/constants.dart';
 
 class HomePage extends StatefulWidget {

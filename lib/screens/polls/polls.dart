@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
 
-import '../../components/header_with_seachbox.dart';
+import '../../widgets/header_with_seachbox.dart';
 
 class PoolPage extends StatefulWidget {
   const PoolPage({Key? key}) : super(key: key);

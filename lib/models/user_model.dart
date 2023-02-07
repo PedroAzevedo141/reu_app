@@ -84,7 +84,10 @@ class UserModel extends Model {
   }
 
   bool isLoggedIn() {
-    return firebaseUser != null;
+    User? firebaseUser = _auth.currentUser;
+    if (firebaseUser != null) return true;
+
+    return false;
   }
 
   Future<Null> _saveUserData(
@@ -96,15 +99,13 @@ class UserModel extends Model {
         .set(userData);
   }
 
-  Future<Null> _loadCurrentUser() async {
-    if (firebaseUser == null) {
-      User? firebaseUser = _auth.currentUser;
-    }
+  Future<void> _loadCurrentUser() async {
+    User? firebaseUser = _auth.currentUser;
     if (firebaseUser != null) {
       if (userData["name"] == null) {
         DocumentSnapshot docUser = await FirebaseFirestore.instance
             .collection("users")
-            .doc(firebaseUser?.user!.uid)
+            .doc(firebaseUser.uid)
             .get();
         userData = docUser.data() as Map<String, dynamic>;
       }
