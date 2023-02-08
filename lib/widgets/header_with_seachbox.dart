@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:reu_app/models/user_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../../constants.dart';
 
@@ -19,39 +21,46 @@ class HeaderWithSearchBox extends StatelessWidget {
       height: size.height * 0.2,
       child: Stack(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(
-              left: kDefaultPadding,
-              right: kDefaultPadding,
-              bottom: 36 + kDefaultPadding,
-            ),
-            height: size.height * 0.2 - 27,
-            decoration: const BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(36),
-                bottomRight: Radius.circular(36),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    'Hi User ...!',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+          ScopedModelDescendant<UserModel>(
+            builder: (context, child, model) {
+              return Container(
+                padding: const EdgeInsets.only(
+                  left: kDefaultPadding,
+                  right: kDefaultPadding,
+                  bottom: 36 + kDefaultPadding,
+                ),
+                height: size.height * 0.2 - 27,
+                decoration: const BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(36),
+                    bottomRight: Radius.circular(36),
                   ),
                 ),
-                CircleAvatar(
-                    radius: (38),
-                    backgroundColor: Colors.white,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.asset("assets/images/no_user.png"),
-                    ))
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        "Ola, ${!model.isLoggedIn() ? "" : model.userData["name"]}",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: CircleAvatar(
+                          radius: (38),
+                          backgroundColor: Colors.white,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.asset("assets/images/no_user.png"),
+                          )),
+                    )
+                  ],
+                ),
+              );
+            },
           ),
           Positioned(
             bottom: 0,
