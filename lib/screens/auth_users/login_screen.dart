@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kSecondaryColor,
         title: Text("Entrar"),
         centerTitle: true,
         actions: [
@@ -47,6 +48,20 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ListView(
               padding: EdgeInsets.all(16.0),
               children: [
+                SizedBox(
+                  height: 32.0,
+                ),
+                CircleAvatar(
+                  radius: (100),
+                  backgroundColor: Colors.white,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset("assets/images/logo_ufpi.jpg"),
+                  ),
+                ),
+                SizedBox(
+                  height: 32.0,
+                ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -103,6 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 44.0,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: kSecondaryColor),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {}
 

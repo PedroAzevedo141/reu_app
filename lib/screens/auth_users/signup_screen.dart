@@ -22,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: kSecondaryColor,
           title: Text("Criar Conta"),
           centerTitle: true,
         ),
@@ -37,6 +38,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: ListView(
                 padding: EdgeInsets.all(16.0),
                 children: [
+                  SizedBox(
+                    height: 32.0,
+                  ),
+                  CircleAvatar(
+                    radius: (100),
+                    backgroundColor: Colors.white,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.asset("assets/images/logo_ufpi.jpg"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 32.0,
+                  ),
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(
@@ -88,11 +103,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   SizedBox(
-                    height: 16.0,
+                    height: 32.0,
                   ),
                   SizedBox(
                     height: 44.0,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: kSecondaryColor),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Map<String, dynamic> userData = {
