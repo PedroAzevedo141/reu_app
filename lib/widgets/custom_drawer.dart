@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
 import 'package:reu_app/models/user_model.dart';
@@ -14,80 +15,80 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-        child: Stack(
-          children: [
-            ListView(
-              padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 4),
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 8.0),
-                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
-                  height: 170.0,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 8.0,
-                        left: 0.0,
-                        child: Text(
-                          "REU\nApplication",
-                          style: TextStyle(
-                              fontSize: 34.0, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Positioned(
-                          left: 0.0,
-                          bottom: 0.0,
-                          child: ScopedModelDescendant<UserModel>(
-                            builder: (context, child, model) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Ola, ${!model.isLoggedIn() ? "" : model.userData["name"]}",
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  GestureDetector(
-                                    child: Text(
-                                      !model.isLoggedIn()
-                                          ? "Entre ou cadastre-se >"
-                                          : "Sair",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                    onTap: (() {
-                                      if (!model.isLoggedIn())
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    LoginScreen()));
-                                      else
-                                        model.signOut();
-                                    }),
-                                  ),
-                                ],
-                              );
-                            },
-                          ))
-                    ],
+        child: ScopedModelDescendant<UserModel>(
+          builder: (context, child, model) {
+            if (model.isLoggedIn()) {
+              return ListView(
+                children: [
+                  UserAccountsDrawerHeader(
+                    accountName: Text("Residência Universitária"),
+                    accountEmail: Text("${model.userData["email"]}"),
+                    currentAccountPicture: CircleAvatar(
+                        radius: (50),
+                        backgroundColor: Colors.white,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset("assets/images/logo_ufpi.jpg"),
+                        )),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [kPrimaryColor, kTertiaryColor],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                    ),
                   ),
-                ),
-                Divider(),
-                DrawerTile(Icons.home, "Inicio", pageController, 0),
-                DrawerTile(Icons.poll, "Enquetes", pageController, 1),
-                DrawerTile(
-                    Icons.warning, "Quadro de Avisos", pageController, 2),
-                DrawerTile(
-                    Icons.groups, "Lista de Residentes", pageController, 3),
-                DrawerTile(Icons.calendar_month, "Calendario de Atividades",
-                    pageController, 4),
-              ],
-            )
-          ],
+                  DrawerTile(Icons.home, "Inicio", pageController, 0, model),
+                  DrawerTile(Icons.poll, "Enquetes", pageController, 1, model),
+                  DrawerTile(Icons.warning, "Quadro de Avisos", pageController,
+                      2, model),
+                  DrawerTile(Icons.groups, "Lista de Residentes",
+                      pageController, 3, model),
+                  DrawerTile(Icons.calendar_month, "Calendario de Atividades",
+                      pageController, 4, model),
+                  DrawerTile(Icons.logout, "Sair", pageController, -1, model),
+                ],
+              );
+            } else {
+              return ListView(
+                children: [
+                  UserAccountsDrawerHeader(
+                    accountName: Text("Residência Universitária"),
+                    accountEmail: Text("sundar@appmaking.co"),
+                    currentAccountPicture: CircleAvatar(
+                        radius: (50),
+                        backgroundColor: Colors.white,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset("assets/images/logo_ufpi.jpg"),
+                        )),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [kPrimaryColor, kTertiaryColor],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.login,
+                      size: 32.0,
+                    ),
+                    title: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginScreen()));
+                    },
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

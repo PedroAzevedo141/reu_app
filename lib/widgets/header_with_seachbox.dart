@@ -43,7 +43,9 @@ class HeaderWithSearchBox extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        "Ola, ${!model.isLoggedIn() ? "" : model.userData["name"]}",
+                        !model.isLoggedIn()
+                            ? "Ola, novo usuario!"
+                            : "Ola, ${!model.isLoggedIn() ? "" : model.userData["name"]}",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
