@@ -93,6 +93,7 @@ class UserModel extends Model {
   Future<Null> _saveUserData(
       Map<String, dynamic> userData, UserCredential user) async {
     this.userData = userData;
+    print("Cheguei Aqui no save3User");
     await FirebaseFirestore.instance
         .collection("users")
         .doc(user.user?.uid)
