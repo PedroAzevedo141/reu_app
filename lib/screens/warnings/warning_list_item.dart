@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class WarningListItem extends StatelessWidget {
-  final String title, descricao, dateTime, user;
+  final String title, descricao, dateTime, user, id_warning;
 
   WarningListItem({
     super.key,
@@ -14,16 +14,12 @@ class WarningListItem extends StatelessWidget {
     required this.descricao,
     required this.dateTime,
     required this.user,
+    required this.id_warning,
   });
 
   @override
   Widget build(BuildContext context) {
     String auxUser = "Pedro Azevedo";
-
-    print(title);
-    print(descricao);
-    print(dateTime);
-    print(user);
 
     const TextStyle optionStyle =
         TextStyle(fontSize: 21, fontWeight: FontWeight.bold);
@@ -48,7 +44,15 @@ class WarningListItem extends StatelessWidget {
             ),
             SlidableAction(
               onPressed: (context) {
-                // onDelete(newWarning);
+                CollectionReference users =
+                    FirebaseFirestore.instance.collection('warnings');
+
+                users
+                    .doc(id_warning)
+                    .delete()
+                    .then((value) => print("User Deleted"))
+                    .catchError(
+                        (error) => print("Failed to delete user: $error"));
               },
               borderRadius: const BorderRadius.all(
                 Radius.circular(10),

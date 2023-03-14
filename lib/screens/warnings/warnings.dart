@@ -91,6 +91,7 @@ class _WarningPageState extends State<WarningPage> {
                     document.data()! as Map<String, dynamic>;
                 print("-=-=-=-=-=-=-=-=-");
                 print("data: $data");
+                print(document.id);
                 print("-=-=-=-=-=-=-=-=-");
                 if (data['title'] != null) {
                   return WarningListItem(
@@ -98,6 +99,7 @@ class _WarningPageState extends State<WarningPage> {
                     descricao: data['description'],
                     dateTime: data['dateTime'],
                     user: data['user_ID'],
+                    id_warning: document.id,
                   );
                 } else {
                   return const Padding(
@@ -124,10 +126,6 @@ class _WarningPageState extends State<WarningPage> {
         }
 
         print("Final!");
-        // return Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: children,
-        // );
 
         return Stack(
           children: <Widget>[
@@ -146,20 +144,36 @@ class _WarningPageState extends State<WarningPage> {
                 SliverToBoxAdapter(
                   child: HeaderWithSearchBox(size: size),
                 ),
-                // const SliverToBoxAdapter(
-                //   child: Padding(padding: EdgeInsets.all(400)),
-                // ),
-                // SliverList(
-                //   delegate: SliverChildListDelegate([
-                //     for (WarningModels war in warningsList)
-                //       WarningListItem(
-                //         newWarning: war,
-                //         onDelete: onDelete,
-                //       ),
-                //   ]),
-                // ),
-                // UserInformation(),
-
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: 15.0, bottom: 8.0),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.filter_list,
+                                color: kTertiaryColor,
+                              ),
+                              const Text(
+                                "Filtros",
+                                style: TextStyle(
+                                  color: kTertiaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 SliverList(
                   delegate: SliverChildListDelegate(children),
                 ),
