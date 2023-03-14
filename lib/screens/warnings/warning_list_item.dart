@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:reu_app/screens/warnings/models/warning_models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class WarningListItem extends StatelessWidget {
-  WarningModels newWarning;
-  final Function(WarningModels) onDelete;
+  final String title, descricao, dateTime, user;
 
   WarningListItem({
     super.key,
-    required this.newWarning,
-    required this.onDelete,
+    required this.title,
+    required this.descricao,
+    required this.dateTime,
+    required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    String auxUser = newWarning.user;
+    String auxUser = "Pedro Azevedo";
+
+    print(title);
+    print(descricao);
+    print(dateTime);
+    print(user);
 
     const TextStyle optionStyle =
         TextStyle(fontSize: 21, fontWeight: FontWeight.bold);
@@ -40,7 +48,7 @@ class WarningListItem extends StatelessWidget {
             ),
             SlidableAction(
               onPressed: (context) {
-                onDelete(newWarning);
+                // onDelete(newWarning);
               },
               borderRadius: const BorderRadius.all(
                 Radius.circular(10),
@@ -57,14 +65,14 @@ class WarningListItem extends StatelessWidget {
           elevation: 3,
           // margin: marginCards,
           child: ExpansionTile(
-            title: Text(newWarning.title),
+            title: Text(title),
             subtitle: Text('Enviado por: $auxUser'),
             children: <Widget>[
               // for (String war in WarningPage.warnings_list)
               ListTile(
                 title: Center(
                     child: Text(
-                  newWarning.title,
+                  title,
                   style: optionStyle,
                 )),
                 subtitle: Center(
@@ -72,15 +80,16 @@ class WarningListItem extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text(newWarning.descricao),
+                      child: Text(descricao),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text(
-                        DateFormat('dd/MMM/yyyy - HH:mm')
-                            .format(newWarning.dateTime),
-                        style: const TextStyle(fontSize: 8),
-                      ),
+                      // child: Text(
+                      //   DateFormat('dd/MMM/yyyy - HH:mm')
+                      //       .format(dateTime as DateTime),
+                      //   style: const TextStyle(fontSize: 8),
+                      child:
+                          Text(dateTime, style: const TextStyle(fontSize: 8)),
                     ),
                   ],
                 )),

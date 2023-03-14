@@ -5,6 +5,7 @@ import 'package:reu_app/screens/activity/activity.dart';
 import 'package:reu_app/screens/home/home.dart';
 import 'package:reu_app/screens/polls/polls.dart';
 import 'package:reu_app/screens/residents/residents.dart';
+import 'package:reu_app/screens/warnings/modal_add.dart';
 import 'package:reu_app/screens/warnings/warnings.dart';
 import 'package:reu_app/widgets/custom_drawer.dart';
 
@@ -12,6 +13,10 @@ class HomePageController extends StatelessWidget {
   HomePageController({super.key});
 
   final _pageController = PageController();
+
+  final TextEditingController warningControllerTitle = TextEditingController();
+  final TextEditingController warningControllerDesc = TextEditingController();
+  final TextEditingController warningControllerUser = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,16 @@ class HomePageController extends StatelessWidget {
           ),
         ),
         Scaffold(
-          body: WarningPage(),
+          body: WarningPage(warningControllerTitle, warningControllerDesc,
+              warningControllerUser),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              modalBottom(context, warningControllerTitle,
+                  warningControllerDesc, warningControllerUser);
+            },
+            backgroundColor: kPrimaryColor,
+            child: const Icon(Icons.add),
+          ),
           drawer: CustomDrawer(
             pageController: _pageController,
           ),
