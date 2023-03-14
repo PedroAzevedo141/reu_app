@@ -169,7 +169,7 @@ Future<void> addWarning(warnings, title, desc) async {
       'title': title,
       'description': desc,
       'type_warning': userData["type"],
-      'user_ID': firebaseUser.uid,
+      'user_ID': userData["name"],
       'warning_read': "0",
       'dateTime': DateTime.now().toIso8601String(),
     });

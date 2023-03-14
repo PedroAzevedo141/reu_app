@@ -19,8 +19,6 @@ class WarningListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String auxUser = "Pedro Azevedo";
-
     const TextStyle optionStyle =
         TextStyle(fontSize: 21, fontWeight: FontWeight.bold);
 
@@ -70,7 +68,7 @@ class WarningListItem extends StatelessWidget {
           // margin: marginCards,
           child: ExpansionTile(
             title: Text(title),
-            subtitle: Text('Enviado por: $auxUser'),
+            subtitle: Text('Enviado por: $user'),
             children: <Widget>[
               // for (String war in WarningPage.warnings_list)
               ListTile(
