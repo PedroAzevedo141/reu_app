@@ -116,6 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             "name": _nameController.text,
                             "cpf": _cpfController.text,
                             "email": _emailController.text,
+                            "type": "0",
                           };
 
                           model.signUp(

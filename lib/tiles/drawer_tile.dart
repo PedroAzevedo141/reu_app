@@ -20,6 +20,7 @@ class DrawerTile extends StatelessWidget {
           child: InkWell(
             onTap: () {
               model.signOut();
+              controller.jumpToPage(0);
             },
             child: Container(
               height: 60.0,

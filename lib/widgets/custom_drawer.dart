@@ -53,7 +53,7 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   UserAccountsDrawerHeader(
                     accountName: Text("Residência Universitária"),
-                    accountEmail: Text("sundar@appmaking.co"),
+                    accountEmail: Text(""),
                     currentAccountPicture: CircleAvatar(
                         radius: (50),
                         backgroundColor: Colors.white,
