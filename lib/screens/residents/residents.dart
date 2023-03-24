@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:reu_app/screens/residents/update_type_residents.dart';
 
 import '../../widgets/header_with_seachbox.dart';
 
@@ -25,7 +26,6 @@ class _ResidentsPageState extends State<ResidentsPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        List<Widget> children;
         List<Widget> type0;
         List<Widget> type1;
         List<Widget> type2;
@@ -33,212 +33,28 @@ class _ResidentsPageState extends State<ResidentsPage> {
         List<Widget> type4;
         if (snapshot.hasError) {
           print("hasError!");
-          type0 = <Widget>[
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text('Stack trace: ${snapshot.stackTrace}'),
-            ),
-          ];
-
-          type1 = <Widget>[
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text('Stack trace: ${snapshot.stackTrace}'),
-            ),
-          ];
-
-          type2 = <Widget>[
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text('Stack trace: ${snapshot.stackTrace}'),
-            ),
-          ];
-
-          type3 = <Widget>[
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text('Stack trace: ${snapshot.stackTrace}'),
-            ),
-          ];
-
-          type4 = <Widget>[
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text('Stack trace: ${snapshot.stackTrace}'),
-            ),
-          ];
+          type0 = widgetHasError(snapshot);
+          type1 = widgetHasError(snapshot);
+          type2 = widgetHasError(snapshot);
+          type3 = widgetHasError(snapshot);
+          type4 = widgetHasError(snapshot);
         } else {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               print("none!");
-              type0 = const <Widget>[
-                Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Select a lot'),
-                ),
-              ];
-
-              type1 = const <Widget>[
-                Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Select a lot'),
-                ),
-              ];
-
-              type2 = const <Widget>[
-                Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Select a lot'),
-                ),
-              ];
-
-              type3 = const <Widget>[
-                Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Select a lot'),
-                ),
-              ];
-
-              type4 = const <Widget>[
-                Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Select a lot'),
-                ),
-              ];
-
+              type0 = widgetConnectionStateNone();
+              type1 = widgetConnectionStateNone();
+              type2 = widgetConnectionStateNone();
+              type3 = widgetConnectionStateNone();
+              type4 = widgetConnectionStateNone();
               break;
             case ConnectionState.waiting:
               print("waiting!");
-              type0 = const <Widget>[
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting bids...'),
-                ),
-              ];
-
-              type1 = const <Widget>[
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting bids...'),
-                ),
-              ];
-
-              type2 = const <Widget>[
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting bids...'),
-                ),
-              ];
-
-              type3 = const <Widget>[
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting bids...'),
-                ),
-              ];
-
-              type4 = const <Widget>[
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting bids...'),
-                ),
-              ];
-
+              type0 = widgetConnectionStateWaiting();
+              type1 = widgetConnectionStateWaiting();
+              type2 = widgetConnectionStateWaiting();
+              type3 = widgetConnectionStateWaiting();
+              type4 = widgetConnectionStateWaiting();
               break;
             case ConnectionState.active:
               print("active!");
@@ -246,7 +62,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
               type0 = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['email'] != null && data['type'] == "0") {
+                if (data['email'] != null && data['type'] == 0) {
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, bottom: 8.0),
@@ -262,6 +78,12 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         ),
                         title: Text(data['name']),
                         subtitle: Text(data['email']),
+                        trailing: InkWell(
+                          onTap: () {
+                            modalBottomResidents(context, 0, document.id);
+                          },
+                          child: Icon(Icons.settings),
+                        ),
                       ),
                     ),
                   );
@@ -273,7 +95,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
               type1 = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['email'] != null && data['type'] == "1") {
+                if (data['email'] != null && data['type'] == 1) {
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, bottom: 8.0),
@@ -300,7 +122,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
               type2 = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['email'] != null && data['type'] == "2") {
+                if (data['email'] != null && data['type'] == 2) {
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, bottom: 8.0),
@@ -316,6 +138,12 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         ),
                         title: Text(data['name']),
                         subtitle: Text(data['email']),
+                        trailing: InkWell(
+                          onTap: () {
+                            modalBottomResidents(context, 2, document.id);
+                          },
+                          child: Icon(Icons.settings),
+                        ),
                       ),
                     ),
                   );
@@ -327,7 +155,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
               type3 = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['email'] != null && data['type'] == "3") {
+                if (data['email'] != null && data['type'] == 3) {
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, bottom: 8.0),
@@ -343,6 +171,12 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         ),
                         title: Text(data['name']),
                         subtitle: Text(data['email']),
+                        trailing: InkWell(
+                          onTap: () {
+                            modalBottomResidents(context, 3, document.id);
+                          },
+                          child: Icon(Icons.settings),
+                        ),
                       ),
                     ),
                   );
@@ -354,7 +188,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
               type4 = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['email'] != null && data['type'] == "4") {
+                if (data['email'] != null && data['type'] == 4) {
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, bottom: 8.0),
@@ -370,6 +204,12 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         ),
                         title: Text(data['name']),
                         subtitle: Text(data['email']),
+                        trailing: InkWell(
+                          onTap: () {
+                            modalBottomResidents(context, 4, document.id);
+                          },
+                          child: Icon(Icons.settings),
+                        ),
                       ),
                     ),
                   );
@@ -381,66 +221,11 @@ class _ResidentsPageState extends State<ResidentsPage> {
               break;
             case ConnectionState.done:
               print("Done!");
-              type0 = <Widget>[
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ];
-
-              type1 = <Widget>[
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ];
-
-              type2 = <Widget>[
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ];
-
-              type3 = <Widget>[
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ];
-
-              type4 = <Widget>[
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ];
-
+              type0 = widgetConnectionStateDone(snapshot);
+              type1 = widgetConnectionStateDone(snapshot);
+              type2 = widgetConnectionStateDone(snapshot);
+              type3 = widgetConnectionStateDone(snapshot);
+              type4 = widgetConnectionStateDone(snapshot);
               break;
           }
         }
@@ -609,4 +394,64 @@ class _ResidentsPageState extends State<ResidentsPage> {
       },
     );
   }
+}
+
+List<Widget> widgetHasError(snapshot) {
+  return <Widget>[
+    const Icon(
+      Icons.error_outline,
+      color: Colors.red,
+      size: 60,
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Text('Error: ${snapshot.error}'),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Text('Stack trace: ${snapshot.stackTrace}'),
+    ),
+  ];
+}
+
+List<Widget> widgetConnectionStateNone() {
+  return <Widget>[
+    Icon(
+      Icons.info,
+      color: Colors.blue,
+      size: 60,
+    ),
+    Padding(
+      padding: EdgeInsets.only(top: 16),
+      child: Text('Select a lot'),
+    ),
+  ];
+}
+
+List<Widget> widgetConnectionStateWaiting() {
+  return <Widget>[
+    SizedBox(
+      width: 60,
+      height: 60,
+      child: CircularProgressIndicator(),
+    ),
+    Padding(
+      padding: EdgeInsets.only(top: 16),
+      child: Text('Awaiting bids...'),
+    ),
+  ];
+}
+
+List<Widget> widgetConnectionStateDone(snapshot) {
+  return <Widget>[
+    const Icon(
+      Icons.info,
+      color: Colors.blue,
+      size: 60,
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Text('\$${snapshot.data} (closed)'),
+    ),
+  ];
 }
