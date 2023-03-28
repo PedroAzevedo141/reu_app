@@ -1,3 +1,7 @@
+import 'dart:collection';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -138,6 +142,17 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               ),
             ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 32, right: 32, bottom: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _addEvent(context, _selectedDay);
+                  },
+                  child: Text("Add Event"),
+                ),
+              ),
+            ),
             SliverList(
               delegate: SliverChildListDelegate([
                 ValueListenableBuilder<List<Event>>(
@@ -172,4 +187,53 @@ class _ActivityPageState extends State<ActivityPage> {
       ],
     );
   }
+}
+
+Future<void> _addEvent(BuildContext context, _selectedDay) async {
+  final TextEditingController _eventController = TextEditingController();
+
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Add Event"),
+        content: TextField(
+          controller: _eventController,
+          decoration: InputDecoration(
+            hintText: "Enter event title",
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              String eventTitle = _eventController.text.trim();
+              if (eventTitle.isNotEmpty) {
+                await _saveEvent(eventTitle, _selectedDay);
+              }
+              Navigator.pop(context);
+            },
+            child: Text("Save"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _saveEvent(String eventTitle, DateTime selectedDay) async {
+  final eventsRef = FirebaseFirestore.instance.collection('events');
+  final selectedDate =
+      DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
+  final newEvent = {
+    'title': eventTitle,
+    'date': Timestamp.fromDate(selectedDate)
+  };
+  await eventsRef.add(newEvent);
+  print("Event '$eventTitle' saved for $selectedDay");
 }
