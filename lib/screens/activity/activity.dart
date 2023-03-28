@@ -106,8 +106,9 @@ class _ActivityPageState extends State<ActivityPage> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
                 child: TableCalendar<Event>(
+                  locale: 'pt_BR',
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
                   focusedDay: _focusedDay,
@@ -142,35 +143,30 @@ class _ActivityPageState extends State<ActivityPage> {
                 ValueListenableBuilder<List<Event>>(
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ListTile(
-                              onTap: () => print('${value[index]}'),
-                              title: Text('${value[index]}'),
-                            ),
-                          );
-                        },
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: value
+                            .map((item) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 12.0,
+                                    vertical: 8.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: ListTile(
+                                    onTap: () => print('$item'),
+                                    title: Text('$item'),
+                                  ),
+                                ))
+                            .toList(),
                       ),
                     );
                   },
                 ),
               ]),
             ),
-            const SliverToBoxAdapter(
-              child: Padding(padding: EdgeInsets.all(400)),
-            )
           ],
         )
       ],

@@ -6,6 +6,8 @@ import 'package:reu_app/screens/home_page_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -52,7 +54,7 @@ Future<void> main() async {
   //   });
   // });
 
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
