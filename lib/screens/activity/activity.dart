@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reu_app/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -24,6 +23,14 @@ class _ActivityPageState extends State<ActivityPage> {
   DateTime? _rangeEnd;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   late List<Event> _selectedEvents;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _selectedDay = _focusedDay;
+    _selectedEvents = [];
+  }
 
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('events').snapshots();
@@ -92,33 +99,34 @@ class _ActivityPageState extends State<ActivityPage> {
               var kEventsFire =
                   snapshot.data!.docs.map((DocumentSnapshot document) {
                 return {
-                  'title': document['title'],
-                  'date': document['date'].toDate(),
+                  DateTime.utc(
+                          document['date'].toDate().year,
+                          document['date'].toDate().month,
+                          document['date'].toDate().day):
+                      List.generate(1, (index) => Event(document['title']))
                 };
               }).toList();
 
-              int lenghtList = kEventsFire.length;
-
-              final _kEventSource = {
-                for (var item in List.generate(lenghtList, (index) => index))
-                  DateTime.utc(
-                          kEventsFire[item]["date"].year,
-                          kEventsFire[item]["date"].month,
-                          kEventsFire[item]["date"].day):
-                      List.generate(
-                          1, (index) => Event(kEventsFire[item]["title"]))
-              };
+              Map<DateTime, List<Event>> combinedMap = {};
+              for (var item in kEventsFire) {
+                for (var entry in item.entries) {
+                  combinedMap
+                      .putIfAbsent(entry.key, () => [])
+                      .addAll(entry.value);
+                }
+              }
 
               kEvents = LinkedHashMap<DateTime, List<Event>>(
                 equals: isSameDay,
                 hashCode: getHashCode,
-              )..addAll(_kEventSource);
+              )..addAll(combinedMap);
 
-              // print("-=-=-=-=-=-=-=-");
-              // print(kEvents);
-              // print(_kEventSource);
+              print("-=-=-=-=-=-=-=-");
+              // print(lenghtList);
+              print(kEventsFire);
+              print(combinedMap);
               // print(kEvents.runtimeType);
-              // print("-=-=-=-=-=-=-=-");
+              print("-=-=-=-=-=-=-=-");
               children = [];
               break;
             case ConnectionState.done:
@@ -152,7 +160,8 @@ class _ActivityPageState extends State<ActivityPage> {
           List<Event> events = [];
           kEvents.forEach((chaveMap, valorMap) {
             if (chaveMap == day) {
-              print(valorMap);
+              // print(chaveMap);
+              // print(valorMap);
               events.addAll(valorMap);
             }
           });
@@ -182,6 +191,7 @@ class _ActivityPageState extends State<ActivityPage> {
             print(">>>>>>>>>>>> Cheguei no _selectedEvents");
             _selectedEvents = getEventsForDay(selectedDay);
             print(_selectedEvents);
+            print(">>>>>>>>>>>> Sair do _selectedEvents");
           }
         }
 
@@ -268,36 +278,30 @@ class _ActivityPageState extends State<ActivityPage> {
                       ),
                     ),
                   ),
-                  // SliverList(
-                  //   delegate: SliverChildListDelegate([
-                  //     ValueListenableBuilder<List<Event>>(
-                  //       valueListenable: _selectedEvents,
-                  //       builder: (context, value, _) {
-                  //         return SingleChildScrollView(
-                  //           child: Column(
-                  //             children: value
-                  //                 .map((item) => Container(
-                  //                       margin: const EdgeInsets.symmetric(
-                  //                         horizontal: 12.0,
-                  //                         vertical: 8.0,
-                  //                       ),
-                  //                       decoration: BoxDecoration(
-                  //                         border: Border.all(),
-                  //                         borderRadius:
-                  //                             BorderRadius.circular(12.0),
-                  //                       ),
-                  //                       child: ListTile(
-                  //                         onTap: () => print('$item'),
-                  //                         title: Text('$item'),
-                  //                       ),
-                  //                     ))
-                  //                 .toList(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ]),
-                  // ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      SingleChildScrollView(
+                        child: Column(
+                          children: _selectedEvents
+                              .map((item) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 8.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: ListTile(
+                                      onTap: () => print('$item'),
+                                      title: Text('$item'),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ]),
+                  ),
                 ],
               )
             ],
