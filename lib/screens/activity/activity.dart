@@ -17,174 +17,293 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  late List<Event> _selectedEvents;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-  }
-
-  @override
-  void dispose() {
-    _selectedEvents.dispose();
-    super.dispose();
-  }
-
-  List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
-    return kEvents[day] ?? [];
-  }
-
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
-    final days = daysInRange(start, end);
-
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(_selectedDay, selectedDay)) {
-      setState(() {
-        _selectedDay = selectedDay;
-        _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
-        _rangeEnd = null;
-        _rangeSelectionMode = RangeSelectionMode.toggledOff;
-      });
-
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-    }
-  }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-
-    // `start` or `end` could be null
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
-    }
-  }
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('events').snapshots();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Stack(
-      children: <Widget>[
-        CustomScrollView(
-          slivers: <Widget>[
-            const SliverAppBar(
-              floating: true,
-              snap: true,
-              backgroundColor: kPrimaryColor,
-              elevation: 0.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text("Calendario de Atividades"),
-                centerTitle: true,
-              ),
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        List<Widget> children;
+        var kEvents;
+        if (snapshot.hasError) {
+          print("hasError!");
+          children = <Widget>[
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
             ),
-            SliverToBoxAdapter(
-              child: HeaderWithSearchBox(size: size),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text('Error: ${snapshot.error}'),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
-                child: TableCalendar<Event>(
-                  locale: 'pt_BR',
-                  firstDay: kFirstDay,
-                  lastDay: kLastDay,
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
-                  calendarFormat: _calendarFormat,
-                  rangeSelectionMode: _rangeSelectionMode,
-                  eventLoader: _getEventsForDay,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: CalendarStyle(
-                    // Use `CalendarStyle` to customize the UI
-                    outsideDaysVisible: false,
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text('Stack trace: ${snapshot.stackTrace}'),
+            ),
+          ];
+          kEvents = [];
+        } else {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              print("none!");
+              children = const <Widget>[
+                Icon(
+                  Icons.info,
+                  color: Colors.blue,
+                  size: 60,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text('Select a lot'),
+                ),
+              ];
+              kEvents = [];
+              break;
+            case ConnectionState.waiting:
+              print("waiting!");
+              children = const <Widget>[
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text('Awaiting bids...'),
+                ),
+              ];
+              kEvents = [];
+              break;
+            case ConnectionState.active:
+              print("active!");
+              var kEventsFire =
+                  snapshot.data!.docs.map((DocumentSnapshot document) {
+                return {
+                  'title': document['title'],
+                  'date': document['date'].toDate(),
+                };
+              }).toList();
+
+              int lenghtList = kEventsFire.length;
+
+              final _kEventSource = {
+                for (var item in List.generate(lenghtList, (index) => index))
+                  DateTime.utc(
+                          kEventsFire[item]["date"].year,
+                          kEventsFire[item]["date"].month,
+                          kEventsFire[item]["date"].day):
+                      List.generate(
+                          1, (index) => Event(kEventsFire[item]["title"]))
+              };
+
+              kEvents = LinkedHashMap<DateTime, List<Event>>(
+                equals: isSameDay,
+                hashCode: getHashCode,
+              )..addAll(_kEventSource);
+
+              // print("-=-=-=-=-=-=-=-");
+              // print(kEvents);
+              // print(_kEventSource);
+              // print(kEvents.runtimeType);
+              // print("-=-=-=-=-=-=-=-");
+              children = [];
+              break;
+            case ConnectionState.done:
+              print("Done!");
+              children = <Widget>[
+                const Icon(
+                  Icons.info,
+                  color: Colors.blue,
+                  size: 60,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text('\$${snapshot.data} (closed)'),
+                ),
+              ];
+              kEvents = [];
+              break;
+          }
+        }
+
+        // print("Final!");
+        // print(kEvents);
+
+        List<Event> getEventsForDay(DateTime day) {
+          // Implementation example
+          // print("-=-=-=-=-=-=-=-=-");
+          // print(kEvents);
+          // print(day);
+          // print(kEvents[day] ?? []);
+          // print("-=-=-=-=-=-=-=-=-");
+          List<Event> events = [];
+          kEvents.forEach((chaveMap, valorMap) {
+            if (chaveMap == day) {
+              print(valorMap);
+              events.addAll(valorMap);
+            }
+          });
+
+          return events;
+        }
+
+        getEventsForRange(DateTime start, DateTime end) {
+          // Implementation example
+          final days = daysInRange(start, end);
+
+          return [
+            for (final d in days) ...getEventsForDay(d),
+          ];
+        }
+
+        void onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+          if (!isSameDay(_selectedDay, selectedDay)) {
+            setState(() {
+              _selectedDay = selectedDay;
+              _focusedDay = focusedDay;
+              _rangeStart = null; // Important to clean those
+              _rangeEnd = null;
+              _rangeSelectionMode = RangeSelectionMode.toggledOff;
+            });
+
+            print(">>>>>>>>>>>> Cheguei no _selectedEvents");
+            _selectedEvents = getEventsForDay(selectedDay);
+            print(_selectedEvents);
+          }
+        }
+
+        void onRangeSelected(
+            DateTime? start, DateTime? end, DateTime focusedDay) {
+          setState(() {
+            _selectedDay = null;
+            _focusedDay = focusedDay;
+            _rangeStart = start;
+            _rangeEnd = end;
+            _rangeSelectionMode = RangeSelectionMode.toggledOn;
+          });
+
+          // `start` or `end` could be null
+          if (start != null && end != null) {
+            _selectedEvents = getEventsForRange(start, end);
+          } else if (start != null) {
+            _selectedEvents = getEventsForDay(start);
+          } else if (end != null) {
+            _selectedEvents = getEventsForDay(end);
+          }
+        }
+
+        if (children.isNotEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Stack(
+            children: <Widget>[
+              CustomScrollView(
+                slivers: <Widget>[
+                  const SliverAppBar(
+                    floating: true,
+                    snap: true,
+                    backgroundColor: kPrimaryColor,
+                    elevation: 0.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text("Calendario de Atividades"),
+                      centerTitle: true,
+                    ),
                   ),
-                  onDaySelected: _onDaySelected,
-                  onRangeSelected: _onRangeSelected,
-                  onFormatChanged: (format) {
-                    if (_calendarFormat != format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    }
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
-                  },
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 32, right: 32, bottom: 16),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _addEvent(context, _selectedDay);
-                  },
-                  child: Text("Add Event"),
-                ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                ValueListenableBuilder<List<Event>>(
-                  valueListenable: _selectedEvents,
-                  builder: (context, value, _) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: value
-                            .map((item) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 12.0,
-                                    vertical: 8.0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: ListTile(
-                                    onTap: () => print('$item'),
-                                    title: Text('$item'),
-                                  ),
-                                ))
-                            .toList(),
+                  SliverToBoxAdapter(
+                    child: HeaderWithSearchBox(size: size),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+                      child: TableCalendar(
+                        locale: 'pt_BR',
+                        firstDay: kFirstDay,
+                        lastDay: kLastDay,
+                        focusedDay: _focusedDay,
+                        eventLoader: getEventsForDay,
+                        onDaySelected: onDaySelected,
+                        onRangeSelected: onRangeSelected,
+                        calendarFormat: _calendarFormat,
+                        selectedDayPredicate: (day) {
+                          return isSameDay(_selectedDay, day);
+                        },
+                        onFormatChanged: (format) {
+                          if (_calendarFormat != format) {
+                            setState(() {
+                              _calendarFormat = format;
+                            });
+                          }
+                        },
+                        onPageChanged: (focusedDay) {
+                          _focusedDay = focusedDay;
+                        },
                       ),
-                    );
-                  },
-                ),
-              ]),
-            ),
-          ],
-        )
-      ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 32, right: 32, bottom: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _addEvent(context, _selectedDay);
+                        },
+                        child: Text("Add Event"),
+                      ),
+                    ),
+                  ),
+                  // SliverList(
+                  //   delegate: SliverChildListDelegate([
+                  //     ValueListenableBuilder<List<Event>>(
+                  //       valueListenable: _selectedEvents,
+                  //       builder: (context, value, _) {
+                  //         return SingleChildScrollView(
+                  //           child: Column(
+                  //             children: value
+                  //                 .map((item) => Container(
+                  //                       margin: const EdgeInsets.symmetric(
+                  //                         horizontal: 12.0,
+                  //                         vertical: 8.0,
+                  //                       ),
+                  //                       decoration: BoxDecoration(
+                  //                         border: Border.all(),
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(12.0),
+                  //                       ),
+                  //                       child: ListTile(
+                  //                         onTap: () => print('$item'),
+                  //                         title: Text('$item'),
+                  //                       ),
+                  //                     ))
+                  //                 .toList(),
+                  //           ),
+                  //         );
+                  //       },
+                  //     ),
+                  //   ]),
+                  // ),
+                ],
+              )
+            ],
+          );
+        }
+      },
     );
   }
 }
@@ -229,7 +348,7 @@ Future<void> _addEvent(BuildContext context, _selectedDay) async {
 Future<void> _saveEvent(String eventTitle, DateTime selectedDay) async {
   final eventsRef = FirebaseFirestore.instance.collection('events');
   final selectedDate =
-      DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
+      DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day + 1);
   final newEvent = {
     'title': eventTitle,
     'date': Timestamp.fromDate(selectedDate)
