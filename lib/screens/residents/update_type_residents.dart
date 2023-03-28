@@ -20,7 +20,7 @@ modalBottomResidents(context, type, String idUser) {
     backgroundColor: Colors.white,
     context: context,
     builder: (context) {
-      double _currentSliderValue = 20;
+      double currentSliderValue = type;
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return SingleChildScrollView(
@@ -33,8 +33,8 @@ modalBottomResidents(context, type, String idUser) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
+                      const Padding(
+                        padding: EdgeInsets.only(
                             top: 16.0, left: 16.0, right: 16.0, bottom: 32.0),
                         child: Center(
                           child: Text(
@@ -46,19 +46,38 @@ modalBottomResidents(context, type, String idUser) {
                           ),
                         ),
                       ),
-                      Slider(
-                        value: _currentSliderValue,
-                        max: 100,
-                        divisions: 5,
-                        label: _currentSliderValue.round().toString(),
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentSliderValue = value;
-                          });
-                        },
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 24, right: 24),
+                        child: Slider(
+                          value: currentSliderValue,
+                          min: 0,
+                          max: 4,
+                          divisions: 4,
+                          label: convertNames(
+                              currentSliderValue.round().toString()),
+                          onChanged: (double value) {
+                            setState(() {
+                              currentSliderValue = value;
+                            });
+                          },
+                        ),
                       ),
-                      const SizedBox(
-                        height: 200,
+                      Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            style: style,
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(idUser)
+                                  .update({"type": currentSliderValue.round()});
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Salvar'),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -73,6 +92,7 @@ modalBottomResidents(context, type, String idUser) {
 }
 
 String convertNames(String name) {
+  print(name);
   switch (name) {
     case "0":
       return "Sem Cadastro";
@@ -88,62 +108,3 @@ String convertNames(String name) {
       return "Error!";
   }
 }
-
-// Future<void> dialogBuilder(BuildContext context, int i, String id) {
-//   if (i == 0) {
-//     String buttom1 = "Para NAE";
-//     String buttom2 = "Para Residente";
-//   } else if (i == 2) {
-//     String buttom1 = "Antigo Residente";
-//     String buttom2 = "Para Residente";
-//   } else if (i == 3) {
-//     String buttom1 = "Antigo Residente";
-//     String buttom2 = "Para Conselho";
-//   } else if (i == 4) {
-//     String buttom1 = "Sem Cadastro";
-//     String buttom2 = "Para Residente";
-//   }
-//   return showDialog<void>(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: const Text('Deseja mudar o tipo de cadastro do usuário?'),
-//         content: const Text(
-//             'Ao alterar o tipo de cadastro, o processo poderá ser alterado.\n'
-//             'Deseja continuar?'),
-//         actions: <Widget>[
-//           ElevatedButton(
-//             style: TextButton.styleFrom(
-//               backgroundColor: redAlert,
-//               textStyle: Theme.of(context).textTheme.labelLarge,
-//             ),
-//             child: const Text('Cancelar'),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//           ElevatedButton(
-//             style: TextButton.styleFrom(
-//               backgroundColor: kQuaternaryColor,
-//               textStyle: Theme.of(context).textTheme.labelLarge,
-//             ),
-//             child: const Text(buttom1),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//           ElevatedButton(
-//             style: TextButton.styleFrom(
-//               backgroundColor: kButtomColor,
-//               textStyle: Theme.of(context).textTheme.labelLarge,
-//             ),
-//             child: const Text('Enable'),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }

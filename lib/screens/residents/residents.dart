@@ -80,7 +80,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         subtitle: Text(data['email']),
                         trailing: InkWell(
                           onTap: () {
-                            modalBottomResidents(context, 0, document.id);
+                            modalBottomResidents(context, 0.0, document.id);
                           },
                           child: Icon(Icons.settings),
                         ),
@@ -140,7 +140,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         subtitle: Text(data['email']),
                         trailing: InkWell(
                           onTap: () {
-                            modalBottomResidents(context, 2, document.id);
+                            modalBottomResidents(context, 2.0, document.id);
                           },
                           child: Icon(Icons.settings),
                         ),
@@ -173,7 +173,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         subtitle: Text(data['email']),
                         trailing: InkWell(
                           onTap: () {
-                            modalBottomResidents(context, 3, document.id);
+                            modalBottomResidents(context, 3.0, document.id);
                           },
                           child: Icon(Icons.settings),
                         ),
@@ -206,7 +206,7 @@ class _ResidentsPageState extends State<ResidentsPage> {
                         subtitle: Text(data['email']),
                         trailing: InkWell(
                           onTap: () {
-                            modalBottomResidents(context, 4, document.id);
+                            modalBottomResidents(context, 4.0, document.id);
                           },
                           child: Icon(Icons.settings),
                         ),
