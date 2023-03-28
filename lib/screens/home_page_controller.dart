@@ -73,6 +73,11 @@ class HomePageController extends StatelessWidget {
           drawer: CustomDrawer(
             pageController: _pageController,
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: kPrimaryColor,
+            child: const Icon(Icons.add),
+          ),
         ),
       ],
     );
