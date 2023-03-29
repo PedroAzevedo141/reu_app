@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 
-modalBottom(context, warningControllerTitle, warningControllerDesc,
-    warningControllerUser) {
+modalBottomPolls(context) {
   final ButtonStyle style = ElevatedButton.styleFrom(
     elevation: 3,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-    minimumSize: const Size(120, 40),
+    minimumSize: const Size(140, 50),
     backgroundColor: kButtomColor,
   );
 
-  CollectionReference warnings =
-      FirebaseFirestore.instance.collection('warnings');
+  CollectionReference polls = FirebaseFirestore.instance.collection('polls');
+
+  final TextEditingController pollControllerTitle = TextEditingController();
+  final TextEditingController pollcontrollertitleAwenser1 =
+      TextEditingController();
+  final TextEditingController pollcontrollertitleAwenser2 =
+      TextEditingController();
+  final TextEditingController pollcontrollertitleAwenser3 =
+      TextEditingController();
 
   return showModalBottomSheet(
     isScrollControlled: true,
@@ -42,7 +48,7 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
                   padding: EdgeInsets.only(bottom: 24, left: 16, right: 16),
                   child: Center(
                     child: Text(
-                      "Insira um novo aviso",
+                      "Insira uma nova enquete",
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -55,25 +61,51 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
                   padding:
                       const EdgeInsets.only(bottom: 24, left: 16, right: 16),
                   child: TextFormField(
-                    controller: warningControllerTitle,
+                    controller: pollControllerTitle,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Insira o titulo do aviso',
+                      hintText: 'Insira o titulo da enquete',
                       labelText: ' Titulo',
                     ),
                   ),
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+                      const EdgeInsets.only(bottom: 24, left: 28, right: 28),
                   child: TextFormField(
-                    controller: warningControllerDesc,
+                    controller: pollcontrollertitleAwenser1,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Detalhes do aviso',
-                      hintText: ' Insira a descricao do aviso...',
+                      hintText: 'Insira a primeira opção',
+                      labelText: ' Opção 1',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 24, left: 28, right: 28),
+                  child: TextFormField(
+                    controller: pollcontrollertitleAwenser2,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Insira a segunda opção',
+                      labelText: ' Opção 2',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 24, left: 28, right: 28),
+                  child: TextFormField(
+                    controller: pollcontrollertitleAwenser3,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Insira a terceira opção',
+                      labelText: ' Opção 3',
                     ),
                   ),
                 ),
@@ -84,16 +116,13 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
                     child: ElevatedButton(
                       style: style,
                       onPressed: () {
-                        String title = warningControllerTitle.text;
-                        String desc = warningControllerDesc.text;
-
-                        if (title.isEmpty) {
+                        if (pollControllerTitle.text.isEmpty) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text("Falta informacoes!"),
                               content:
-                                  const Text("Informe o titulo do aviso..."),
+                                  const Text("Informe o titulo da enquete..."),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -109,13 +138,13 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
                           return;
                         }
 
-                        if (desc.isEmpty) {
+                        if (pollControllerTitle.text.isEmpty) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text("Falta informacoes!"),
                               content:
-                                  const Text("Informe a descricao do aviso..."),
+                                  const Text("Informe o titulo da enquete..."),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -131,15 +160,42 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
                           return;
                         }
 
-                        addWarning(warnings, warningControllerTitle.text,
-                            warningControllerDesc.text);
+                        if (conditionAnswer(
+                            pollcontrollertitleAwenser1,
+                            pollcontrollertitleAwenser2,
+                            pollcontrollertitleAwenser3)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Falta informacoes!"),
+                              content: const Text(
+                                  "Informe pelo menos duas opções de resposta..."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: Colors.black),
+                                  child: const Text("Voltar"),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        }
 
-                        warningControllerTitle.clear();
-                        warningControllerDesc.clear();
+                        addPoll(
+                            polls,
+                            pollControllerTitle,
+                            pollcontrollertitleAwenser1,
+                            pollcontrollertitleAwenser2,
+                            pollcontrollertitleAwenser3);
+
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        'Enviar o aviso',
+                        'Criar a enquete',
                       ),
                     ),
                   ),
@@ -153,7 +209,8 @@ modalBottom(context, warningControllerTitle, warningControllerDesc,
   );
 }
 
-Future<void> addWarning(warnings, title, desc) async {
+Future<void> addPoll(polls, pollControllerTitle, pollcontrollertitleAwenser1,
+    pollcontrollertitleAwenser2, pollcontrollertitleAwenser3) async {
   Map<String, dynamic> userData = {};
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? firebaseUser = _auth.currentUser;
@@ -164,14 +221,34 @@ Future<void> addWarning(warnings, title, desc) async {
         .get();
     userData = docUser.data() as Map<String, dynamic>;
 
-    warnings.add({
-      'title': title,
-      'description': desc,
-      'type_warning': userData["type"],
+    polls.add({
+      'title': pollControllerTitle.text,
+      'awenser1': pollcontrollertitleAwenser1.text,
+      'awenser2': pollcontrollertitleAwenser2.text,
+      'awenser3': pollcontrollertitleAwenser3.text,
+      'awenser1_count': 0,
+      'awenser2_count': 0,
+      'awenser3_count': 0,
+      'dateTime': DateTime.now().toIso8601String(),
       'user_Name': userData["name"],
       'user_ID': firebaseUser.uid,
-      'warning_read': "0",
-      'dateTime': DateTime.now().toIso8601String(),
     });
   }
+}
+
+conditionAnswer(pollcontrollertitleAwenser1, pollcontrollertitleAwenser2,
+    pollcontrollertitleAwenser3) {
+  if (pollcontrollertitleAwenser1.text.isEmpty &&
+      pollcontrollertitleAwenser2.text.isEmpty) {
+    return true;
+  }
+  if (pollcontrollertitleAwenser1.text.isEmpty &&
+      pollcontrollertitleAwenser3.text.isEmpty) {
+    return true;
+  }
+  if (pollcontrollertitleAwenser3.text.isEmpty &&
+      pollcontrollertitleAwenser2.text.isEmpty) {
+    return true;
+  }
+  return false;
 }

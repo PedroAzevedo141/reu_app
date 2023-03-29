@@ -94,7 +94,7 @@ class _WarningPageState extends State<WarningPage> {
                     title: data['title'],
                     descricao: data['description'],
                     dateTime: data['dateTime'],
-                    user: data['user_ID'],
+                    user: data['user_Name'],
                     id_warning: document.id,
                   );
                 } else {

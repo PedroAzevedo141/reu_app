@@ -4,6 +4,7 @@ import 'package:reu_app/constants.dart';
 import 'package:reu_app/screens/activity/activity.dart';
 import 'package:reu_app/screens/home/home.dart';
 import 'package:reu_app/screens/polls/polls.dart';
+import 'package:reu_app/screens/polls/polls_add.dart';
 import 'package:reu_app/screens/residents/residents.dart';
 import 'package:reu_app/screens/warnings/modal_add.dart';
 import 'package:reu_app/screens/warnings/warnings.dart';
@@ -45,6 +46,13 @@ class HomePageController extends StatelessWidget {
           body: PoolPage(),
           drawer: CustomDrawer(
             pageController: _pageController,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              modalBottomPolls(context);
+            },
+            backgroundColor: kPrimaryColor,
+            child: const Icon(Icons.add),
           ),
         ),
         Scaffold(
