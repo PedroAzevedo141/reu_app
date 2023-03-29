@@ -3,7 +3,7 @@ WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (fil
 WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-20:13:18.165 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-20:13:18.362 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-20:13:28.515 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - reu-app-2066f-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 283ms, init: 0ms
-20:13:28.557 [NamespaceSystem-blocking-namespace-operation-dispatcher-6] INFO com.firebase.core.namespace.StateManager - Namespace reu-app-2066f-default-rtdb status Active to Active
+05:11:40.084 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+05:11:40.256 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+05:11:50.918 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO com.firebase.core.namespace.NamespaceActor - reu-app-2066f-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 108ms, init: 0ms
+05:11:50.959 [NamespaceSystem-blocking-namespace-operation-dispatcher-7] INFO com.firebase.core.namespace.StateManager - Namespace reu-app-2066f-default-rtdb status Active to Active

@@ -85,10 +85,10 @@ class _WarningPageState extends State<WarningPage> {
               children = snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                print("-=-=-=-=-=-=-=-=-");
-                print("data: $data");
-                print(document.id);
-                print("-=-=-=-=-=-=-=-=-");
+                // print("-=-=-=-=-=-=-=-=-");
+                // print("data: $data");
+                // print(document.id);
+                // print("-=-=-=-=-=-=-=-=-");
                 if (data['title'] != null) {
                   return WarningListItem(
                     title: data['title'],

@@ -90,7 +90,6 @@ class _PoolPageState extends State<PoolPage> {
                     /// It returns the PollFrameModel .Use this function to do some extra operations like storing this poll into other variable.
                     onSelection: (PollFrameModel model,
                         PollOptions? selectedOptionModel) {
-                      print("1");
                       if (selectedOptionModel!.id == 1) {
                         updateUser(document.id, data, "awenser1_count", 1);
                       } else if (selectedOptionModel.id == 2) {
@@ -102,10 +101,6 @@ class _PoolPageState extends State<PoolPage> {
                       }
                     },
                     onReset: (PollFrameModel model) {
-                      print(model);
-                      print(model.options[0].isSelected);
-                      print(model.options[1].isSelected);
-                      print(model.options[2].isSelected);
                       print(
                           'Poll has been reset, this happens only in case of editable polls');
                     },
@@ -233,9 +228,6 @@ class _PoolPageState extends State<PoolPage> {
                 SliverList(
                   delegate: SliverChildListDelegate(children),
                 ),
-                SliverToBoxAdapter(
-                  child: const Padding(padding: EdgeInsets.all(400)),
-                )
               ],
             )
           ],

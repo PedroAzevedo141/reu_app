@@ -92,7 +92,6 @@ modalBottomResidents(context, type, String idUser) {
 }
 
 String convertNames(String name) {
-  print(name);
   switch (name) {
     case "0":
       return "Sem Cadastro";

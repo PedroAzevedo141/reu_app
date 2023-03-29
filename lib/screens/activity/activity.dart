@@ -120,13 +120,6 @@ class _ActivityPageState extends State<ActivityPage> {
                 equals: isSameDay,
                 hashCode: getHashCode,
               )..addAll(combinedMap);
-
-              print("-=-=-=-=-=-=-=-");
-              // print(lenghtList);
-              print(kEventsFire);
-              print(combinedMap);
-              // print(kEvents.runtimeType);
-              print("-=-=-=-=-=-=-=-");
               children = [];
               break;
             case ConnectionState.done:
@@ -147,21 +140,13 @@ class _ActivityPageState extends State<ActivityPage> {
           }
         }
 
-        // print("Final!");
-        // print(kEvents);
+        print("Final!");
 
         List<Event> getEventsForDay(DateTime day) {
           // Implementation example
-          // print("-=-=-=-=-=-=-=-=-");
-          // print(kEvents);
-          // print(day);
-          // print(kEvents[day] ?? []);
-          // print("-=-=-=-=-=-=-=-=-");
           List<Event> events = [];
           kEvents.forEach((chaveMap, valorMap) {
             if (chaveMap == day) {
-              // print(chaveMap);
-              // print(valorMap);
               events.addAll(valorMap);
             }
           });
@@ -188,10 +173,7 @@ class _ActivityPageState extends State<ActivityPage> {
               _rangeSelectionMode = RangeSelectionMode.toggledOff;
             });
 
-            print(">>>>>>>>>>>> Cheguei no _selectedEvents");
             _selectedEvents = getEventsForDay(selectedDay);
-            print(_selectedEvents);
-            print(">>>>>>>>>>>> Sair do _selectedEvents");
           }
         }
 
