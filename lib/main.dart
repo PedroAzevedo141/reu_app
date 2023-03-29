@@ -14,45 +14,6 @@ Future<void> main() async {
 
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-  // try {
-  //   UserCredential userCredential = await FirebaseAuth.instance
-  //       .signInWithEmailAndPassword(
-  //           email: "pedroazevedo141@gmail.com", password: "123456");
-  //   print(userCredential);
-  // } on FirebaseAuthException catch (e) {
-  //   if (e.code == 'user-not-found') {
-  //     print('No user found for that email.');
-  //   } else if (e.code == 'wrong-password') {
-  //     print('Wrong password provided for that user.');
-  //   }
-  // }
-  // print('-=-=-=-=-=-=-=-=-=-=-');
-
-  // //code example flutter firebase auth emulator
-
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  // FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-
-  // try {
-  //   UserCredential userCredential = await FirebaseAuth.instance
-  //       .signInWithEmailAndPassword(email: "email", password: "password");
-  //   print(userCredential);
-  // } on FirebaseAuthException catch (e) {
-  //   if (e.code == 'user-not-found') {
-  //     print('No user found for that email.');
-  //   } else if (e.code == 'wrong-password') {
-  //     print('Wrong password provided for that user.');
-  //   }
-  // }
-
-  // // now read and write to the database
-  // FirebaseFirestore.instance.collection('users').add({'name': 'John Doe'});
-  // // now read the inserted data
-  // FirebaseFirestore.instance.collection('users').get().then((value) {
-  //   value.docs.forEach((element) {
-  //     print(element.data());
-  //   });
-  // });
 
   initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
