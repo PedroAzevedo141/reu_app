@@ -92,16 +92,20 @@ class _PoolPageState extends State<PoolPage> {
                         PollOptions? selectedOptionModel) {
                       print("1");
                       if (selectedOptionModel!.id == 1) {
-                        updateUser(document.id, data, "awenser1_count");
+                        updateUser(document.id, data, "awenser1_count", 1);
                       } else if (selectedOptionModel.id == 2) {
-                        updateUser(document.id, data, "awenser2_count");
+                        updateUser(document.id, data, "awenser2_count", 2);
                       } else if (selectedOptionModel.id == 3) {
-                        updateUser(document.id, data, "awenser3_count");
+                        updateUser(document.id, data, "awenser3_count", 3);
                       } else {
                         print("error");
                       }
                     },
                     onReset: (PollFrameModel model) {
+                      print(model);
+                      print(model.options[0].isSelected);
+                      print(model.options[1].isSelected);
+                      print(model.options[2].isSelected);
                       print(
                           'Poll has been reset, this happens only in case of editable polls');
                     },
@@ -120,7 +124,7 @@ class _PoolPageState extends State<PoolPage> {
                     /// For more language support add translations for that language code in translations/translations.dart and widgets/poll_status.dart.
                     /// Add timeago.setLocaleMessages('it', timeago.ItMessages()); to register locales for timeago/remaining in widgets/poll_status.dart.
                     /// Add 'es': 'deshacer' to maps present in translations/translations.dart for other translations.
-                    languageCode: 'es',
+                    languageCode: 'en',
 
                     /// Content Padding inside polls widget.
                     padding: const EdgeInsets.all(15),
@@ -161,7 +165,7 @@ class _PoolPageState extends State<PoolPage> {
                           pollsCount: data['awenser1_count'],
 
                           /// Polls received by that option.
-                          isSelected: false,
+                          isSelected: data['isSelected'] == 1,
 
                           /// If poll selected.
                           id: 1,
@@ -171,13 +175,13 @@ class _PoolPageState extends State<PoolPage> {
                         PollOptions(
                           label: data['awenser2'],
                           pollsCount: data['awenser2_count'],
-                          isSelected: false,
+                          isSelected: data['isSelected'] == 2,
                           id: 2,
                         ),
                         PollOptions(
                           label: data['awenser3'],
                           pollsCount: data['awenser3_count'],
-                          isSelected: false,
+                          isSelected: data['isSelected'] == 3,
                           id: 3,
                         ),
                       ],
@@ -247,7 +251,7 @@ class _PoolPageState extends State<PoolPage> {
   }
 }
 
-Future<void> updateUser(id, data, type) async {
+Future<void> updateUser(id, data, type, int itemSelected) async {
   Map<String, dynamic> userData = {};
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? firebaseUser = _auth.currentUser;
@@ -265,7 +269,8 @@ Future<void> updateUser(id, data, type) async {
         .doc(id)
         .update({
           'userVoted': FieldValue.arrayUnion([firebaseUser.uid]),
-          type: data[type] + 1
+          type: data[type] + 1,
+          'isSelected': itemSelected,
         })
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update user: $error"));
