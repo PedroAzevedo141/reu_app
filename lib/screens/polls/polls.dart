@@ -133,7 +133,7 @@ class _PoolPageState extends State<PoolPage> {
                       title: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          data['title'],
+                          data['title'] + " - " + data['user_Name'],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -160,7 +160,7 @@ class _PoolPageState extends State<PoolPage> {
                           pollsCount: data['awenser1_count'],
 
                           /// Polls received by that option.
-                          isSelected: data['isSelected'] == 1,
+                          isSelected: currentisSelected(data['userVoted'], 1),
 
                           /// If poll selected.
                           id: 1,
@@ -170,13 +170,13 @@ class _PoolPageState extends State<PoolPage> {
                         PollOptions(
                           label: data['awenser2'],
                           pollsCount: data['awenser2_count'],
-                          isSelected: data['isSelected'] == 2,
+                          isSelected: currentisSelected(data['userVoted'], 2),
                           id: 2,
                         ),
                         PollOptions(
                           label: data['awenser3'],
                           pollsCount: data['awenser3_count'],
-                          isSelected: data['isSelected'] == 3,
+                          isSelected: currentisSelected(data['userVoted'], 3),
                           id: 3,
                         ),
                       ],
@@ -239,7 +239,31 @@ class _PoolPageState extends State<PoolPage> {
   bool currentUserUID(data) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User? firebaseUser = _auth.currentUser;
-    return data.contains(firebaseUser?.uid);
+    if (data.length == 0) {
+      return false;
+    }
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].containsKey(firebaseUser?.uid)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool currentisSelected(data, int itemSelected) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? firebaseUser = _auth.currentUser;
+    if (data.length == 0) {
+      return false;
+    }
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].containsKey(firebaseUser?.uid)) {
+        if (data[i][firebaseUser?.uid] == itemSelected) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }
 
@@ -260,9 +284,10 @@ Future<void> updateUser(id, data, type, int itemSelected) async {
     return pollsUpdate
         .doc(id)
         .update({
-          'userVoted': FieldValue.arrayUnion([firebaseUser.uid]),
+          'userVoted': FieldValue.arrayUnion([
+            {firebaseUser.uid: itemSelected}
+          ]),
           type: data[type] + 1,
-          'isSelected': itemSelected,
         })
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update user: $error"));
